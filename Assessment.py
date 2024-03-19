@@ -2,35 +2,35 @@ import easygui
 
 """Setting out the nested dictionary, which houses all tasks"""
 tasks = {
-    "1":{
+    1:{
         "Title": "Design Homepage",
         "Description": "Create a mockup of the homepage",
         "Assignee": "JSM",
         "Priority": 3,
         "Status": "In Progress",
     },
-    "2":{
+    2:{
         "Title": "Implement Login Page",
         "Description": "Create the Login page for the website",
         "Assignee": "JSM",
         "Priority": 3,
         "Status": "Blocked",
     },
-    "3":{
+    3:{
         "Title": "Fix Navigation Menu",
         "Description": "Fix the navigation menu to be more user friendly",
         "Assignee": "None",
         "Priority": 1,
         "Status": "Not Started",
     },
-    "4":{
+    4:{
         "Title": "Add Payment Processing",
         "Description": "Implement payment processing for the website",
         "Assignee": "JLO",
         "Priority": 2,
         "Status": "In Progress",
     },
-    "5":{
+    5:{
         "Title": "Create an About Us Page",
         "Description": "Create a page with information about the company",
         "Assignee": "BDI",
@@ -60,11 +60,13 @@ members = {
 }
 
 
-"""Establishing variables which are called for later on in the code"""
+"""Establishing variables and lists which are called for later on in 
+the code"""
 member_codes = []
 for codes in members: 
     member_codes.append(codes)
 member_codes.append("None")
+status_choices = ["Not Started", "Blocked", "In Progress","Completed"]
 
 
 
@@ -89,16 +91,20 @@ def add_task():
     #Getting all information for the new task from the user
     msg = "Enter a title for the task"
     title = easygui.enterbox(msg)
+
     msg = "Enter a description of the task:"
     description = easygui.enterbox(msg)
+
     msg = "Select a team member to assign to the task:"
     blank = ""
     choices = member_codes
     assignee = easygui.buttonbox(msg,blank,choices)
+
     msg ="Enter the priority of the task (1-3):"
-    priority = easygui.integerbox(msg)
+    priority = easygui.integerbox(msg,lowerbound=1,upperbound=3)
+
     msg = "Enter the status of the task:"
-    status = easygui.enterbox(msg)
+    status = easygui.buttonbox(msg,blank,status_choices)
 
     #Add the new entry to the tasks dictionary
     task_number = 1
@@ -117,42 +123,37 @@ def add_task():
     easygui.msgbox(msg, title)
 
 
-def delete_task():
-    """Allows the user to remove a task from the dictionary entirely
-    """
-
-    categories = [] 
-    title = "SELECT" 
-    msg = "Click on the task you would like to remove" 
-    #Adding the tasks from the dictionary to a list
-    for task in tasks: 
-        categories.append(task) 
-
-    #Getting the users choice
-    deleted_task = easygui.buttonbox(msg, title, categories) 
-    msg= f"Are you sure you want to delete {deleted_task}?"
-    title = "CONFIRM"
-    choices = ["Yes","No"]
-    confirm = easygui.buttonbox(msg,title,choices)
-
-    #Confirming the choice
-    if confirm == "Yes":
-        del tasks[delete_task]
-        msg = "Done!"
-        title = "COMPLETE"
-        easygui.msgbox(msg,title)
-    else:
-        msg = "Cancelled."
-        title = "CANCEL"
-        easygui.msgbox(msg,title)
 
 
-def change_status():
-    print("e")
-def change_priority():
-    print("e")
-def change_assignee():
-    print("e")
+
+
+
+
+def assignee_search():
+    task_number = 0
+    for x in tasks:
+        task_number += 1
+    choices.append(tasks[x]["Title"])
+
+
+    
+def update_status():
+    print("status")
+
+
+
+def update_priority():
+    print("1-3")
+
+
+
+def update_assignee():
+    print("change assign")
+
+
+
+
+
 
 
 
@@ -160,24 +161,33 @@ def change_assignee():
 while True:
     msg = "Please choose an option"
     title = "MAIN MENU"                                                            
-    choices = ["Print whole", "Update tasks", "Quit"]
+    choices = ["Print whole","Search by assignee","Add a task","Update tasks",
+    "Quit"]
     main_menu = easygui.buttonbox(msg,title,choices)
 
     #Checking which function to run based off input from main menu
     if main_menu == "Print whole":
-        print_whole() 
+        print_whole()
+    elif main_menu == "Search by assignee":
+        assignee_search()
+    elif main_menu == "Add a task":
+        add_task() 
 
     #A seperate menu if the user wishes to change the dictionary,
     #as to not overcrowd the buttonbox
     elif main_menu == "Update tasks":
         msg = "What do you want to do?"
         title = "CHOOSE"
-        choices = ["Add a task", "Delete a task", "Back"]
+        choices = ["Update assignee","Update priority","Update status","Back"]
         mini_menu = easygui.buttonbox(msg,title,choices)
-        if mini_menu == "Add a task":
-            add_task()
-        elif mini_menu == "Delete a task":
-            delete_task()
+
+        #Checking which function to run based off input from mini menu
+        if mini_menu == "Update assignee":
+            update_assignee()
+        elif mini_menu == "Update priority":
+            update_priority() 
+        elif mini_menu == "Update status":
+            update_status() 
             
     else:
         break
