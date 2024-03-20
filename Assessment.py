@@ -67,8 +67,8 @@ for codes in members:
     member_codes.append(codes)
 member_codes.append("None")
 status_choices = ["Not Started", "Blocked", "In Progress","Completed"]
-
-
+blank = ""
+y_or_n= ["Yes","No"]
 
 """All functions will now be added"""
 
@@ -123,22 +123,22 @@ def add_task():
     easygui.msgbox(msg, title)
 
 
-
-
-
-
-
-
 def assignee_search():
-    task_number = 0
-    for x in tasks:
-        task_number += 1
-    choices.append(tasks[x]["Title"])
+    print("search")
+
+
+
+
+
 
 
     
 def update_status():
     print("status")
+
+
+
+    
 
 
 
@@ -148,8 +148,49 @@ def update_priority():
 
 
 def update_assignee():
-    print("change assign")
+    print("change assignee")
+    msg = "Who do you want the new assignee to be?"
+    choices = member_codes
+    new = easygui.buttonbox(msg,blank,choices)
+    tasks[task_id][aspect] = new
+    msg = "Done!"
+    easygui.msgbox(msg)
 
+
+
+def update():
+    choices = []
+    task_number = 0
+    for x in tasks:
+        task_number += 1
+        choices.append(tasks[x]["Title"])
+    msg = "Which task do you want to update?"
+    task = easygui.buttonbox(msg,blank,choices)
+
+    if task in tasks[1]:
+        task_id = 1
+    elif task in tasks[2]:
+        task_id = 2
+    elif task in tasks[3]:
+        task_id = 3
+    elif task in tasks[4]:
+        task_id = 4
+    elif task in tasks[5]:
+        task_id = 5
+    else:
+        print("oops")
+
+    msg = "What aspect of the task do you want to change?"
+    choices = ["Assignee","Priority","Status"]
+    aspect = easygui.buttonbox(msg,blank,choices)
+    if aspect == "Assignee":
+        update_assignee()
+    elif aspect == "Priority":
+        update_priority()
+    elif aspect == "Status":
+        update_status()
+    else:
+        print("e")
 
 
 
@@ -176,6 +217,8 @@ while True:
     #A seperate menu if the user wishes to change the dictionary,
     #as to not overcrowd the buttonbox
     elif main_menu == "Update tasks":
+        update()
+        """
         msg = "What do you want to do?"
         title = "CHOOSE"
         choices = ["Update assignee","Update priority","Update status","Back"]
@@ -188,7 +231,7 @@ while True:
             update_priority() 
         elif mini_menu == "Update status":
             update_status() 
-            
+        """
     else:
         break
 
