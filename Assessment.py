@@ -69,6 +69,8 @@ member_codes.append("None")
 status_choices = ["Not Started", "Blocked", "In Progress","Completed"]
 blank = ""
 y_or_n= ["Yes","No"]
+task_id= 1
+aspect = ""
 
 """All functions will now be added"""
 
@@ -125,72 +127,52 @@ def add_task():
 
 def assignee_search():
     print("search")
-
-
-
-
-
-
-
     
-def update_status():
-    print("status")
-
-
-
-    
-
-
-
-def update_priority():
-    print("1-3")
-
-
-
-def update_assignee():
-    print("change assignee")
-    msg = "Who do you want the new assignee to be?"
-    choices = member_codes
-    new = easygui.buttonbox(msg,blank,choices)
-    tasks[task_id][aspect] = new
-    msg = "Done!"
-    easygui.msgbox(msg)
 
 
 
 def update():
     choices = []
-    task_number = 0
-    for x in tasks:
+    task_number = 1
+    for i in tasks:
+        choices.append(tasks[task_number]["Title"])
         task_number += 1
-        choices.append(tasks[x]["Title"])
     msg = "Which task do you want to update?"
     task = easygui.buttonbox(msg,blank,choices)
 
-    if task in tasks[1]:
-        task_id = 1
-    elif task in tasks[2]:
-        task_id = 2
-    elif task in tasks[3]:
-        task_id = 3
-    elif task in tasks[4]:
-        task_id = 4
-    elif task in tasks[5]:
-        task_id = 5
-    else:
-        print("oops")
+
+    task_id = 1
+    for i in tasks:
+        if task in tasks[task_id]["Title"]:
+            break
+        else:
+            task_id += 1
+            print(task_id)
 
     msg = "What aspect of the task do you want to change?"
     choices = ["Assignee","Priority","Status"]
     aspect = easygui.buttonbox(msg,blank,choices)
+
+
     if aspect == "Assignee":
-        update_assignee()
+        msg = "Who do you want the new assignee to be?"
+        choices = member_codes
+        new = easygui.buttonbox(msg,blank,choices)
+
     elif aspect == "Priority":
-        update_priority()
+        msg = "What do you wantt the new priority to be?"
+        new = easygui.integerbox(msg,lowerbound=1,upperbound=3)
+        
     elif aspect == "Status":
-        update_status()
+        msg = "What do you want the new status to be?"
+        new = easygui.buttonbox(msg,blank,status_choices)
+
     else:
         print("e")
+
+    tasks[task_id][aspect] = new
+    msg = "Done!"
+    easygui.msgbox(msg)
 
 
 
