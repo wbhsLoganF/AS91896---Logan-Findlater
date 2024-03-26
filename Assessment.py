@@ -73,7 +73,7 @@ task_id= 1
 blank = ""
 aspect = ""
 
-"""All functions will now be added"""
+"""All functions will now be defined"""
 
 def print_whole():
     """Displays entire nested dictionary in one msgbox by adding each
@@ -99,9 +99,7 @@ def add_task():
     description = easygui.enterbox(msg)
 
     msg = "Select a team member to assign to the task:"
-    blank = ""
-    choices = member_codes
-    assignee = easygui.buttonbox(msg,blank,choices)
+    assignee = easygui.buttonbox(msg,blank,member_codes)
 
     msg ="Enter the priority of the task (1-3):"
     priority = easygui.integerbox(msg,lowerbound=1,upperbound=3)
@@ -126,10 +124,57 @@ def add_task():
     easygui.msgbox(msg, title)
 
 
-def assignee_search():
-    print("search")
-    
 
+
+
+
+
+
+def assignee_search():
+    msg = "Select a team member:"
+    assignee = easygui.buttonbox(msg,blank,member_codes)
+
+    task_id = 1
+    output = ""
+    temp_dict = {}
+    for i in tasks:
+        if assignee in tasks[task_id]["Assignee"]:
+            temp_dict[task_id]
+        task_id += 1
+
+
+
+    """"""
+    output = ""
+    for item, item_info in tasks.items():
+        output += (f"\nTask Number: {item} \n\n")  
+        for key in item_info:
+            output += (f"{key}: {item_info[key]}  \n")
+    title = "LIST"
+    easygui.msgbox(output, title)
+
+
+
+
+    """
+    tasks[task_number] = {
+        "Title": title,
+        "Description": description,
+        "Assignee": assignee,
+        "Priority": priority,
+        "Status": status,
+    }
+    msg = f"{title} has been added to the database."
+    title ="Entry Added"
+    easygui.msgbox(msg, title)
+    """
+
+
+
+
+
+
+    
 
 
 def update():
@@ -183,7 +228,7 @@ def update():
         print("e")
     
     #Confirming thechange to avoid user mistakes
-    msg = f"So you want to change the {aspect} of '{task}' to {new}?"
+    msg = f"So you want to change the {aspect} of '{task}' to '{new}'?"
     title = "CONFIRM"
     confirm = easygui.buttonbox(msg,title,y_or_n)
     
