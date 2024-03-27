@@ -60,8 +60,10 @@ members = {
 }
 
 
+
 """Establishing variables and lists which are called for later on in 
 the code"""
+
 member_codes = []
 for codes in members: 
     member_codes.append(codes)
@@ -72,6 +74,7 @@ y_or_n= ["Yes","No"]
 task_id= 1
 blank = ""
 aspect = ""
+
 
 """All functions will now be defined"""
 
@@ -86,6 +89,7 @@ def print_whole():
             output += (f"{key}: {item_info[key]}  \n")
     title = "LIST"
     easygui.msgbox(output, title)
+
 
 
 def add_task():
@@ -125,56 +129,44 @@ def add_task():
 
 
 
-
-
-
-
-
 def assignee_search():
+    """Allows the user to select a team member and see all non 
+    completed tasks assigned to them"""
+
+    #User selects a code from a list defined at the top
     msg = "Select a team member:"
     assignee = easygui.buttonbox(msg,blank,member_codes)
 
     task_id = 1
     output = ""
     temp_dict = {}
+
+    #Main chunk of code that runs through the tasks dictionary. If the 
+    # assignee information matches the information in the assignee key 
+    # of the dictionary, and the task is not marked as completed, it is
+    # added to a new dictionary.
     for i in tasks:
-        if assignee in tasks[task_id]["Assignee"]:
-            temp_dict[task_id]
+        if assignee in tasks[task_id]["Assignee"] \
+        and tasks[task_id]["Status"] != "Completed":
+            temp_dict[task_id]={
+                "Title": tasks[task_id]["Title"],
+                "Description": tasks[task_id]["Description"],
+                "Assignee": tasks[task_id]["Assignee"],
+                "Priority": tasks[task_id]["Priority"],
+                "Status": tasks[task_id]["Status"],
+            }
         task_id += 1
 
-
-
-    """"""
-    output = ""
-    for item, item_info in tasks.items():
+    #Adding each aspect from every task in the new dictionary one by 
+    # one to display aesthetically
+    for item, item_info in temp_dict.items():
         output += (f"\nTask Number: {item} \n\n")  
         for key in item_info:
             output += (f"{key}: {item_info[key]}  \n")
-    title = "LIST"
+
+    title = f"TASKS ASSIGNED : {assignee}"
     easygui.msgbox(output, title)
 
-
-
-
-    """
-    tasks[task_number] = {
-        "Title": title,
-        "Description": description,
-        "Assignee": assignee,
-        "Priority": priority,
-        "Status": status,
-    }
-    msg = f"{title} has been added to the database."
-    title ="Entry Added"
-    easygui.msgbox(msg, title)
-    """
-
-
-
-
-
-
-    
 
 
 def update():
@@ -218,7 +210,7 @@ def update():
         new = easygui.buttonbox(msg,blank,member_codes)
 
     elif aspect == "Priority":
-        msg = "What do you wantt the new priority to be? (/3)"
+        msg = "What do you want the new priority to be? (/3)"
         new = easygui.integerbox(msg,lowerbound=1,upperbound=3)
         
     elif aspect == "Status":
@@ -227,7 +219,7 @@ def update():
     else:
         print("e")
     
-    #Confirming thechange to avoid user mistakes
+    #Confirming the change to avoid user mistakes
     msg = f"So you want to change the {aspect} of '{task}' to '{new}'?"
     title = "CONFIRM"
     confirm = easygui.buttonbox(msg,title,y_or_n)
