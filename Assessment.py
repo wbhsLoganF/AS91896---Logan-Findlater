@@ -169,6 +169,55 @@ def assignee_search():
 
 
 
+
+
+def title_search():
+
+    #Simple loop to simultaneously determine the amount of tasks in the 
+    # database and pull the titles of the tasks into a list to display 
+    # in a buttonbox, rather than displaying the task ids (as the user 
+    # could have used the add_task function to add more than the base 
+    # amount of 5)
+    choices = []
+    task_numbers = 1
+    output = ""
+    for i in tasks:
+        choices.append(tasks[task_numbers]["Title"])
+        task_numbers += 1
+
+    #The user selects a title from the previously created list
+    msg = "                        Which task are you searching for?"
+    title = "SELECT TASK"
+    task = easygui.buttonbox(msg,title,choices)
+
+    #Finding the task number (task_id) that the title selected goes 
+    # with in order to display it individually 
+    task_id = 1
+    for i in tasks:
+        if task in tasks[task_id]["Title"]:
+            break
+        else:
+            task_id += 1
+
+    temp_dict = {}
+    temp_dict[task_id]={
+                "Title": tasks[task_id]["Title"],
+                "Description": tasks[task_id]["Description"],
+                "Assignee": tasks[task_id]["Assignee"],
+                "Priority": tasks[task_id]["Priority"],
+                "Status": tasks[task_id]["Status"],
+            }
+
+    for item, item_info in temp_dict.items():
+        output += (f"\nTask Number: {item} \n\n")  
+        for key in item_info:
+            output += (f"{key}: {item_info[key]}  \n")
+
+    title = f"TASK"
+    easygui.msgbox(output, title)
+
+
+
 def update():
     """Allows the user to change a task in the database, assignee, 
     priority, or status"""
@@ -185,8 +234,9 @@ def update():
         task_numbers += 1
 
     #The user selects a title from the previously created list
-    msg = "Which task do you want to update?"
-    task = easygui.buttonbox(msg,blank,choices)
+    msg = "                        Which task do you want to update?"
+    title = "SELECT TASK"
+    task = easygui.buttonbox(msg,title,choices)
 
     #Finding the task number (task_id) that the title selected goes 
     # with in order to change another aspect of the task
@@ -196,12 +246,12 @@ def update():
             break
         else:
             task_id += 1
-            print(task_id)
     
     #User selects the aspect they would like to update from a list 
     # defined at the top, "Assignee, Priority, Status"
     msg = "What aspect of the task do you want to change?"
-    aspect = easygui.buttonbox(msg,blank,update_choices)
+    title = "SELECT ASPECT"
+    aspect = easygui.buttonbox(msg,title,update_choices)
 
     #Determining the users selected aspect to update, and getting the 
     # users input for the new value to be associated with it
@@ -211,13 +261,15 @@ def update():
 
     elif aspect == "Priority":
         msg = "What do you want the new priority to be? (/3)"
-        new = easygui.integerbox(msg,lowerbound=1,upperbound=3)
+        title = "ENTER PRIORITY"
+        new = easygui.integerbox(msg,title,lowerbound=1,upperbound=3)
         
     elif aspect == "Status":
         msg = "What do you want the new status to be?"
-        new = easygui.buttonbox(msg,blank,status_choices)
+        title = "SELECT STATUS"
+        new = easygui.buttonbox(msg,title,status_choices)
     else:
-        print("e")
+        easygui.msgbox("error")
     
     #Confirming the change to avoid user mistakes
     msg = f"So you want to change the {aspect} of '{task}' to '{new}'?"
@@ -240,22 +292,32 @@ def update():
 while True:
     msg = "Please choose an option"
     title = "MAIN MENU"                                                            
-    choices = ["Print whole","Search by assignee","Add a task","Update tasks",
+    choices = ["Print whole","Search","Add a task","Update tasks",
     "Quit"]
     main_menu = easygui.buttonbox(msg,title,choices)
 
     #Checking which function to run based off input from main menu
     if main_menu == "Print whole":
         print_whole()
-    elif main_menu == "Search by assignee":
-        assignee_search()
+
+    elif main_menu == "Search":
+        msg = "How would you like to search?"
+        title = "SEARCH"
+        choices = ["Search by assignee","Search by title"]
+        search_option = easygui.buttonbox(msg,title,choices)
+        if search_option == "Search by assignee":
+            assignee_search()
+        elif search_option == "Search by title":
+            title_search()
+
     elif main_menu == "Add a task":
         add_task() 
+
     elif main_menu == "Update tasks":
         update()
+
     else:
         break
 
 msg = "Goodbye!"
-title = "BYE"
-easygui.msgbox(msg, title)
+easygui.msgbox(msg)
