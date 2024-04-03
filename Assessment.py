@@ -60,7 +60,6 @@ members = {
 }
 
 
-
 """Establishing variables and lists which are called for later on in 
 the code"""
 
@@ -74,11 +73,9 @@ y_or_n= ["Yes","No"]
 task_id= 1
 blank = ""
 aspect = ""
-completed = 0
-in_progress = 0
-blocked = 0
-not_started = 0
-
+valid = False
+space = "                        "
+small_space = "              "
 
 """All functions will now be defined"""
 
@@ -100,36 +97,63 @@ def add_task():
     """Allows the user to add a new task to the database"""
 
     #Getting all information for the new task from the user.
-    msg = "Enter a title for the task"
-    title = easygui.enterbox(msg)
-
+    while valid == False:
+        msg = "Enter a title for the task"
+        title = easygui.enterbox(msg)
+        if title == None:
+            msg = "A title is required"
+            easygui.msgbox(msg)
+        else:
+            break
+    
     msg = "Enter a description of the task:"
     description = easygui.enterbox(msg)
 
     msg = "Select a team member to assign to the task:"
     assignee = easygui.buttonbox(msg,blank,member_codes)
 
-    msg ="Enter the priority of the task (1-3):"
-    priority = easygui.integerbox(msg,lowerbound=1,upperbound=3)
+    while valid == False:
+        msg ="Enter the priority of the task (1-3):"
+        priority = easygui.integerbox(msg,lowerbound=1,upperbound=3)
+        if priority == None:
+            msg = "A priority rating is required"
+            easygui.msgbox(msg)
+        else:
+            break
+    while valid == False:
+        msg = "Enter the status of the task:"
+        status = easygui.buttonbox(msg,blank,status_choices)
+        if status == None:
+            msg = "A status is required"
+            easygui.msgbox(msg)
+        else:
+            break
 
-    msg = "Enter the status of the task:"
-    status = easygui.buttonbox(msg,blank,status_choices)
-
-    #Adds the new entry to the tasks dictionary.
+    #Finding the task id number to assign to the new task (sequential)
     task_number = 1
     for i in tasks:
         task_number += 1
         
-    tasks[task_number] = {
+    msg = f"So you want to add '{title}' to the task list?"
+    confirm = easygui.buttonbox(msg,blank,y_or_n)
+    
+    #Adds the new entry to the tasks dictionary.
+    if confirm == "Yes":
+        tasks[task_number] = {
         "Title": title,
         "Description": description,
         "Assignee": assignee,
         "Priority": priority,
         "Status": status,
-    }
-    msg = f"{title} has been added to the database."
-    title ="Entry Added"
-    easygui.msgbox(msg, title)
+        }
+        msg = f"{title} has been added to the database."
+        title ="Entry Added"
+        easygui.msgbox(msg, title)
+
+    else:
+        msg = "Cancelled."
+        easygui.msgbox(msg)
+    
 
 
 
@@ -138,7 +162,7 @@ def assignee_search():
     completed tasks assigned to them"""
 
     #User selects a code from a list defined at the top.
-    msg = "Select a team member:"
+    msg = f"{space}    Select a team member:"
     assignee = easygui.buttonbox(msg,blank,member_codes)
 
     task_id = 1
@@ -191,7 +215,7 @@ def title_search():
         task_numbers += 1
 
     #The user selects a title from the previously created list
-    msg = "                        Which task are you searching for?"
+    msg = f"{space}Which task are you searching for?"
     title = "SELECT TASK"
     task = easygui.buttonbox(msg,title,choices)
 
@@ -239,7 +263,7 @@ def update():
         task_numbers += 1
 
     #The user selects a title from the previously created list
-    msg = "                     Which task do you want to update?"
+    msg = f"{space}Which task do you want to update?"
     title = "SELECT TASK"
     task = easygui.buttonbox(msg,title,choices)
 
@@ -254,14 +278,14 @@ def update():
     
     #User selects the aspect they would like to update from a list 
     # defined at the top, "Assignee, Priority, Status".
-    msg = "What aspect of the task do you want to change?"
+    msg = f"{small_space}   What aspect of the task do you want to change?"
     title = "SELECT ASPECT"
     aspect = easygui.buttonbox(msg,title,update_choices)
 
     #Determining the users selected aspect to update, and getting the 
     # users input for the new value to be associated with it.
     if aspect == "Assignee":
-        msg = "Who do you want the new assignee to be?"
+        msg = f"{small_space}Who do you want the new assignee to be?"
         new = easygui.buttonbox(msg,blank,member_codes)
 
     elif aspect == "Priority":
@@ -270,14 +294,14 @@ def update():
         new = easygui.integerbox(msg,title,lowerbound=1,upperbound=3)
         
     elif aspect == "Status":
-        msg = "What do you want the new status to be?"
+        msg = f"{small_space}       What do you want the new status to be?"
         title = "SELECT STATUS"
         new = easygui.buttonbox(msg,title,status_choices)
     else:
         easygui.msgbox("error")
     
     #Confirming the change to avoid user mistakes.
-    msg = f"So you want to change the {aspect} of '{task}' to '{new}'?"
+    msg = f"    So you want to change the {aspect} of '{task}' to '{new}'?"
     title = "CONFIRM"
     confirm = easygui.buttonbox(msg,title,y_or_n)
     
@@ -288,7 +312,7 @@ def update():
         msg = "Done!"
         easygui.msgbox(msg)
     else:
-        msg = "Cancelled."
+        msg = "Cancelled"
         easygui.msgbox(msg)
 
 
@@ -317,18 +341,19 @@ def report():
         if tasks[task_id]["Status"] == "Not Started":
             not_started += 1
 
-    output += f"Total Tasks:{total}\n\n\"
-    output += f"Tasks Completed:{completed}\n\n\" 
-    output += f"Tasks In Progress:{in_progress}\n\n\"
-    output += f"Tasks Blocked:{blocked}\n\n\"
-    output += f"Tasks Not Started:{not_started}"
+    output += f"Total Tasks: {total}\n\n"
+    output += f"Tasks Completed: {completed}\n\n" 
+    output += f"Tasks In Progress: {in_progress}\n\n"
+    output += f"Tasks Blocked: {blocked}\n\n"
+    output += f"Tasks Not Started: {not_started}"
+
     title = "REPORT"
     easygui.msgbox(output,title)
 
 #Main menu with all options available as a buttonbox.
 while True:
-    msg = "Please choose an option"
-    title = "MAIN MENU"                                                            
+    msg = f"{space}Please choose an option:"
+    title = "MAIN MENU"
     choices = ["Print whole","Search","Add a task","Update tasks",
     "Generate report","Quit"]
     main_menu = easygui.buttonbox(msg,title,choices)
@@ -338,7 +363,7 @@ while True:
         print_whole()
 
     elif main_menu == "Search":
-        msg = "                         How would you like to search?"
+        msg = f"{space}How would you like to search?"
         title = "SEARCH"
         choices = ["Search by assignee","Search by title"]
         search_option = easygui.buttonbox(msg,title,choices)
