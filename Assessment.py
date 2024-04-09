@@ -203,7 +203,6 @@ def assignee_search():
 
 
 
-
 def title_search():
     """Allows the user to select the title of a task from the 
     dictionary to recieve all information on it"""
@@ -280,10 +279,10 @@ def update():
                 break
             else:
                 task_id += 1
-        
+
         #User selects the aspect they would like to update from a list 
         # defined at the top, "Assignee, Priority, Status".
-        
+
         while valid == False:
             msg = f"{gap}  What aspect of the task do you want to change?"
             title = "SELECT ASPECT"
@@ -294,8 +293,8 @@ def update():
             else:
                 break
 
-        #Determining the users selected aspect to update, and getting the 
-        # users input for the new value to be associated with it.
+        #Determining the users selected aspect to update, and getting 
+        # the users input for the new value to be associated with it.
         while valid == False:
             if aspect == "Assignee":
                 msg = f"{gap}     Who do you want the new assignee to be?"
@@ -324,8 +323,8 @@ def update():
         confirm = easygui.buttonbox(msg,title,y_or_n)
             
         if confirm == "Yes":
-            #Using all gathered information to assign a new value to the 
-            # selected task.
+            #Using all gathered information to assign a new value to 
+            # the selected task.
             tasks[task_id][aspect] = new
             msg = f"{space}{gap}Done!"
             easygui.msgbox(msg)
@@ -359,6 +358,9 @@ def report():
         if tasks[task_id]["Status"] == "Not Started":
             not_started += 1
 
+    #Adding the numbers associated with each status option to an 
+    # outputted message, so they will all be displayed in a single 
+    # msgbox
     output += f"Total Tasks: {total}\n\n"
     output += f"Tasks Completed: {completed}\n\n" 
     output += f"Tasks In Progress: {in_progress}\n\n"
@@ -368,6 +370,8 @@ def report():
     title = "REPORT"
     easygui.msgbox(output,title)
 
+
+
 #Main menu with all options available as a buttonbox.
 while True:
     msg = f"{space}  Please choose an option:"
@@ -376,7 +380,7 @@ while True:
     "Generate report","Quit"]
     main_menu = easygui.buttonbox(msg,title,choices)
 
-    #Checking which function to run based off input from main menu.
+    #Checking which function to run based off input from the main menu.
     if main_menu == "Print whole":
         print_whole()
 
@@ -385,6 +389,7 @@ while True:
         title = "SEARCH"
         choices = ["Search by assignee","Search by title"]
         search_option = easygui.buttonbox(msg,title,choices)
+
         if search_option == "Search by assignee":
             assignee_search()
         elif search_option == "Search by title":
@@ -402,4 +407,4 @@ while True:
         break
 
 msg = "Goodbye!"
-easygui.msgbox(f"{space}           {msg}")
+easygui.msgbox(f"{gap}{gap}       {msg}")
