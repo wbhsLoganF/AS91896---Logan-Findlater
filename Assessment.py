@@ -74,10 +74,11 @@ task_id= 1
 blank = ""
 aspect = ""
 valid = False
+big_space = "                                   "
 space = "                        "
 gap = "              "
 
-"""All functions will now be defined"""
+
 
 def print_whole():
     """Displays entire nested dictionary in one msgbox by adding each
@@ -106,6 +107,7 @@ def add_task():
         else:
             break
     
+    #No validation check here as a description is not required.
     msg = "Enter a description of the task:"
     description = easygui.enterbox(msg)
 
@@ -129,14 +131,14 @@ def add_task():
         else:
             break
 
-    #Finding the task id number to assign to the new task (sequential)
+    #Finding the task id number to assign to the new task (sequential).
     task_number = 1
     for i in tasks:
         task_number += 1
-        
+
     msg = f"So you want to add '{title}' to the task list?"
     confirm = easygui.buttonbox(msg,blank,y_or_n)
-    
+
     #Adds the new entry to the tasks dictionary.
     if confirm == "Yes":
         tasks[task_number] = {
@@ -153,7 +155,6 @@ def add_task():
     else:
         msg = f"{space}          Cancelled."
         easygui.msgbox(msg)
-
 
 
 
@@ -202,7 +203,6 @@ def assignee_search():
 
 
 
-
 def title_search():
     """Allows the user to select the title of a task from the 
     dictionary to recieve all information on it"""
@@ -218,7 +218,7 @@ def title_search():
         choices.append(tasks[task_numbers]["Title"])
         task_numbers += 1
 
-    #The user selects a title from the previously created list
+    #The user selects a title from the previously created list.
     msg = f"{space}Which task are you searching for?"
     title = "SELECT TASK"
     task = easygui.buttonbox(msg,title,choices)
@@ -266,7 +266,7 @@ def update():
         choices.append(tasks[task_numbers]["Title"])
         task_numbers += 1
 
-    #The user selects a title from the previously created list
+    #The user selects a title from the previously created list.
     msg = f"{space}Which task do you want to update?"
     title = "SELECT TASK"
     task = easygui.buttonbox(msg,title,choices)
@@ -304,33 +304,35 @@ def update():
                 msg = "What do you want the new priority to be? (/3)"
                 title = "ENTER PRIORITY"
                 new = easygui.integerbox(msg,title,lowerbound=1,upperbound=3)
-                
+
             elif aspect == "Status":
                 msg = f"{gap}       What do you want the new status to be?"
                 title = "SELECT STATUS"
                 new = easygui.buttonbox(msg,title,status_choices)
 
             #Checking validation to make sure user hasn't clicking the 
-            # close or exit "X" when the buttonboxes appear
+            # close or exit "X" when the buttonboxes appear.
             if new == None or new == "":
                 msg = f"{space}   A new value is required"
                 easygui.msgbox(msg)
             else:
                 break
+
         #Confirming the change to avoid user mistakes.
-        msg = f"So you want to change the {aspect} of '{task}' to '{new}'?"
+        msg = f"  So you want to change the {aspect} of '{task}' to '{new}'?"
         title = "CONFIRM"
         confirm = easygui.buttonbox(msg,title,y_or_n)
-            
+
         if confirm == "Yes":
             #Using all gathered information to assign a new value to 
             # the selected task.
             tasks[task_id][aspect] = new
-            msg = f"{space}{gap}Done!"
+            msg = f"{big_space}  Done!"
             easygui.msgbox(msg)
         else:
             msg = f"{space}           Cancelled."
             easygui.msgbox(msg)
+
 
 
 def report():
@@ -360,7 +362,7 @@ def report():
 
     #Adding the numbers associated with each status option to an 
     # outputted message, so they will all be displayed in a single 
-    # msgbox
+    # msgbox.
     output += f"Total Tasks: {total}\n\n"
     output += f"Tasks Completed: {completed}\n\n" 
     output += f"Tasks In Progress: {in_progress}\n\n"
@@ -369,6 +371,7 @@ def report():
 
     title = "REPORT"
     easygui.msgbox(output,title)
+
 
 
 
@@ -407,4 +410,4 @@ while True:
         break
 
 msg = "Goodbye!"
-easygui.msgbox(f"{gap}{gap}       {msg}")
+easygui.msgbox(f"{big_space}{msg}")
