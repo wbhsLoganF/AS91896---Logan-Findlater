@@ -376,7 +376,7 @@ def report():
 #Main menu with all options available as a buttonbox, which link to 
 # their respective function.
 while True:
-    msg = f"{space}  Please choose an option:"
+    msg = f"{space}   Please choose an option:"
     title = "MAIN MENU"
     choices = ["Print whole","Search","Add a task","Update tasks",
     "Generate report","Quit"]
@@ -409,4 +409,4 @@ while True:
         break
 
 msg = "Goodbye!"
-easygui.msgbox(f"{big_space}{msg}")
+easygui.msgbox(f"{big_space} {msg}")
