@@ -257,9 +257,8 @@ def update():
 
     #Simple loop to simultaneously determine the amount of tasks in the 
     # database and pull the titles of the tasks into a list to display 
-    # in a buttonbox, rather than displaying the task ids (as the user 
-    # could have used the add_task function to add more than the base 
-    # amount of 5).
+    # in a buttonbox, rather than displaying the task ids, which the 
+    # user may not know.
     choices = []
     task_numbers = 1
     for i in tasks:
@@ -282,7 +281,6 @@ def update():
 
         #User selects the aspect they would like to update from a list 
         # defined at the top, "Assignee, Priority, Status".
-
         while valid == False:
             msg = f"{gap}  What aspect of the task do you want to change?"
             title = "SELECT ASPECT"
@@ -323,9 +321,9 @@ def update():
         title = "CONFIRM"
         confirm = easygui.buttonbox(msg,title,y_or_n)
 
+        #Using all gathered information to assign a 
+        # new value to the selected task.
         if confirm == "Yes":
-            #Using all gathered information to assign a new value to 
-            # the selected task.
             tasks[task_id][aspect] = new
             msg = f"{big_space}  Done!"
             easygui.msgbox(msg)
@@ -375,7 +373,8 @@ def report():
 
 
 
-#Main menu with all options available as a buttonbox.
+#Main menu with all options available as a buttonbox, which link to 
+# their respective function.
 while True:
     msg = f"{space}  Please choose an option:"
     title = "MAIN MENU"
